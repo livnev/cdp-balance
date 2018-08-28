@@ -75,27 +75,20 @@ def make_risk_parity_objective(inks, tags, mats, sigmas):
 
 #+BEGIN_SRC python :tangle :session :results output silent
 def do_example_with_2():
-     # ETH and DGX
-
-     gems = ["ETH", "DGX"]
-
-     tags = [420., 38.]
-     inks = [10., 100.]
-     mats = [1.5, 1.1]
-     sigmas = [0.2, 0.1]
-
-     f = make_risk_parity_objective(inks, tags, mats, sigmas)
-
-     # target debt: 3000 dai
-     D = 3000
-
-     tabs, loss = optimise_by_annealing(f, 2, scale=(lambda tabs: D * tabs / sum(tabs)),
-                                        tol=.0000001, max_iter=100000)
-
-     print("Results:")
-     for i, gem in enumerate(gems):
-       print("{} CDP: tab={}".format(gem, tabs[i]))
-       print("(collateral ratio={}, liquidation probability={})".format(inks[i]*tags[i]/tabs[i], liquidation_probability(inks[i], tabs[i], tags[i], mats[i], sigmas[i])))
+    # ETH and DGX
+    gems = ["ETH", "DGX"]
+    tags = [420., 38.]
+    inks = [10., 100.]
+    mats = [1.5, 1.1]
+    sigmas = [0.2, 0.1]
+    f = make_risk_parity_objective(inks, tags, mats, sigmas)
+    # target debt: 3000 dai
+    D = 3000
+    tabs, loss = optimise_by_annealing(f, 2, scale=(lambda tabs: D * tabs / sum(tabs)), tol=.0000001, max_iter=100000)
+    print("Results:")
+    for i, gem in enumerate(gems):
+      print("{} CDP: tab={}".format(gem, tabs[i]))
+      print("(collateral ratio={}, liquidation probability={})".format(inks[i]*tags[i]/tabs[i], liquidation_probability(inks[i], tabs[i], tags[i], mats[i], sigmas[i])))
 #+END_SRC
 
 #+BEGIN_SRC python :tangle :results output :session
@@ -103,9 +96,13 @@ do_example_with_2()
 #+END_SRC
 
 #+RESULTS:
-: Traceback (most recent call last):
-:   File "<stdin>", line 1, in <module>
-: NameError: name 'do_example_with_2' is not defined
+: Ran annealing for 29173 iterations.
+: Results:
+: ETH CDP: tab=787.1352720996094
+: (collateral ratio=5.335804592769543, liquidation probability=0.00016256918516488472)
+: DGX CDP: tab=2212.864727900391
+: (collateral ratio=1.717231040871402, liquidation probability=0.00016260812043866757)
+
 
 
 
